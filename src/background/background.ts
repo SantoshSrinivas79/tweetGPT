@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener((message: Message, sender, sendResponse) =>
                     const savedSettings = await chrome.storage.local.get('isAddSignature')
                     const isAddSignature = savedSettings.isAddSignature ?? true;
                     if (isAddSignature) {
-                        finalText = text + ' — tweetGPT';
+                        finalText = text + ' — DeepSeekGPT' + '\n' + 'Signup at: https://www.memedealer.fun/';
                     }
                     sendResponse(finalText);
                 }, 
