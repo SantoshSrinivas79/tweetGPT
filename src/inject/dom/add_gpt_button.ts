@@ -3,7 +3,8 @@ import { wait } from "../../utils/wait";
 const gptIconSrc = chrome.runtime.getURL("icons/32.png");
 const gptIconErrorSrc = chrome.runtime.getURL("icons/button_error.svg");
 const tweetTypes: Array<{ emoji: string; type: string; }> = [
-    {emoji: '👍', type: 'supportive'}, 
+    {emoji: '👍', type: 'supportive'},
+    { emoji: '😎', type: 'casual' }, 
     {emoji: '🎩', type: 'snarky'}, 
     {emoji: '🌤️', type: 'optimistic'},
     {emoji: '🔥', type: 'controversial'}, 
