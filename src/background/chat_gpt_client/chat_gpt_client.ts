@@ -19,6 +19,7 @@ export class ChatGPTClient {
         const systemMessage = `You are a ghostwriter for users tweets. Use locale "${props.locale}". Return only one tweet. Keep it short.`;
         const systemMessage2 =
             "Exclude everything after the tweet. Exclude hashtags. Exclude emojis. Don't apologize. Don't provide translation. Don't provide notes. Exclude сalls to action.";
+        const systemMessage3 = "Don't sound patronizing or like a professor! Don't give advice. Don't give an action or recommendations";
         const userMessage = `Write a ${props.type} tweet${
             props.topic ? ` about ${props.topic}` : ""
         }${props.replyTo ? ` in reply to a tweet "${props.replyTo}"` : ""}`;
@@ -29,6 +30,7 @@ export class ChatGPTClient {
             messages: [
                 { role: "system", content: systemMessage },
                 { role: "system", content: systemMessage2 },
+                { role: "system", content: systemMessage3 },
                 { role: "user", content: userMessage },
             ],
         };
