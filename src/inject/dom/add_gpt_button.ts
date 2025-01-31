@@ -5,6 +5,7 @@ const gptIconErrorSrc = chrome.runtime.getURL("icons/button_error.svg");
 const tweetTypes: Array<{ emoji: string; type: string; }> = [
     {emoji: '👍', type: 'supportive'},
     { emoji: '😎', type: 'casual' }, 
+    { emoji: '👀', type: 'curious' },
     { emoji: '🙏', type: 'thankful' },
     {emoji: '🎩', type: 'snarky'}, 
     {emoji: '🌤️', type: 'optimistic'},

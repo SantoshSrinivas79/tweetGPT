@@ -5,11 +5,13 @@ export type TweetProps = {
     topic?: string,
     locale: string,
     replyTo?: string,
+    replyHandle?: string,    
 }
 
 export class ChatGPTClient {
     waitForTokenCallback: ((newGptToken: string) => void) | undefined;
     async generateTweet(props: TweetProps): Promise<string | undefined> {
+        console.log(`In background.js of generateTweet`);
         const token = await this.getToken();
 
         if (!token) {
@@ -20,23 +22,31 @@ export class ChatGPTClient {
         const systemMessage2 =
             "Exclude everything after the tweet. Exclude hashtags. Exclude emojis. Don't apologize. Don't provide translation. Don't provide notes. Exclude сalls to action.";
         const systemMessage3 = "Don't sound patronizing or like a professor! Don't give advice. Don't give an action or recommendations";
-        const userMessage = `Write a ${props.type} tweet${
-            props.topic ? ` about ${props.topic}` : ""
-        }${props.replyTo ? ` in reply to a tweet "${props.replyTo}"` : ""}`;
+        const systemMessage4 = "Strictly dont use phrases or sentences like Keep pushing, Keep shining, Keep enjoying the journey, Keep it up or anything other keeps.";
+        const systemMessage5 = "Always address the user through his handle.";
+        const systemMessage6 = "Add minor typing mistakes to look human.";
+        const userMessage = `Write a ${props.type} tweet
+                                ${props.topic ? ` about ${props.topic}` : ""}
+                                ${props.replyHandle ? ` replying to ${props.replyHandle}` : ""}
+                                ${props.replyTo ? ` whose tweet says "${props.replyTo}"` : ""}
+                            `;
 
         const body = {
             stream: false,
-            model: "gpt-4o",
+            model: "deepseek-ai/DeepSeek-V3",
             messages: [
                 { role: "system", content: systemMessage },
                 { role: "system", content: systemMessage2 },
                 { role: "system", content: systemMessage3 },
+                { role: "system", content: systemMessage4 },
+                { role: "system", content: systemMessage5 },
+                { role: "system", content: systemMessage6 },
                 { role: "user", content: userMessage },
             ],
         };
 
         try {
-            const response = await fetch(`https://api.openai.com/v1/chat/completions`, {
+            const response = await fetch(`https://api.together.xyz/v1/chat/completions`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -50,7 +60,7 @@ export class ChatGPTClient {
             }
 
             if (response.status !== 200) {
-                console.error(JSON.stringify(response.body));
+                console.error(response.body);
                 chrome.notifications.create(
                     "TextGenerationError",
                     {

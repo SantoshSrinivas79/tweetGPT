@@ -20,11 +20,24 @@ const onToolBarAdded = (toolBarEl: Element) => {
 
                 replyTo = textEl.textContent;
             }
+            // 1) Get the raw HTML:
+            const parentHtml = replyToTweet?.innerHTML ?? "";
+
+            // 2) Regex to capture text between `>@` and `<`
+            const re = />@([\w\d_]+)</;
+            const match = parentHtml.match(re);
+
+            let replyHandle: string | undefined;
+            if (match && match[1]) {
+            // match[1] will be the substring after '@' (e.g. 'pmitu')
+            replyHandle = `@${match[1]}`; // => e.g. '@pmitu'
+            }
 
             const text = await generateText({
                 locale: (await chrome.storage.local.get('language')).language ?? defaultLocale,
                 type,
                 replyTo,
+                replyHandle,
                 topic
             });
             if (text) {
